@@ -4,7 +4,7 @@ import { TUser } from "../user/user.interface";
 
 export type TPost ={
     body: string;
-    attrachments: string[];
+    attachments: string[];
     category: TCategory;
     comments: TComment[];
     upvote: number;
