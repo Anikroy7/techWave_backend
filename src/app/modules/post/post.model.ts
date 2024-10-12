@@ -20,14 +20,8 @@ const postSchema = new Schema<TPost>({
     },
     category: { type: String, required: true },
     comments: { type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }], default: [] },
-    downvote: {
-        type: Number,
-        default:0
-    },
-    upvote: {
-        type: Number,
-        default:0
-    },
+    downvote: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+    upvote: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     isDeleted: {
         type: Boolean,

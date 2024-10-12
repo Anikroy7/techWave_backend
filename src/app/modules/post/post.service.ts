@@ -44,16 +44,16 @@ const getAllPostsFromDB = async () => {
 };
 const getMyPostsFromDB = async (userId: string) => {
     const objectId = new mongoose.Types.ObjectId(userId);
-console.log('objectId', objectId)
+console.log('objectId from client', objectId)
     const posts = await Post.find(
         { user: objectId, isDeleted: { $ne: true } }
       )
         .select("-createdAt -updatedAt -__v")
-        .populate('user');
+        .populate('user')
+        .sort({ createdAt: -1 });
     return posts;
 };
 const deletePostFromDB = async (_id: string) => {
-    console.log('objectId', 'objectId')
 
     const post = await Post.findById(_id);
     if (!post) {

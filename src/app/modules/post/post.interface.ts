@@ -6,8 +6,8 @@ export type TPost ={
     attachments?: string[];
     category: string;
     comments: TComment[];
-    upvote: number;
-    downvote: number;
+    upvote: TUser[];
+    downvote: TUser[];
     user: TUser;
     isDeleted: boolean;
 }
