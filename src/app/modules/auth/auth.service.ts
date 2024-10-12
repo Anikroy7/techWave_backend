@@ -8,7 +8,6 @@ import { sendEmail } from "../../utils/sendEmail";
 import { JwtPayload } from "jsonwebtoken";
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
-import { lchown } from "fs";
 
 
 const loginUser = async (payload: TLoginUser) => {
@@ -32,7 +31,20 @@ const loginUser = async (payload: TLoginUser) => {
     userId: user._id,
     email: user.email,
     role: user.role,
+    profileImage: newUser?.profileImage,
+    name: newUser?.name,
+    followers: newUser?.followers,
+    following: newUser?.following,
+    posts: newUser?.posts,
+    phone: newUser?.phone,
+    address: newUser?.address
   };
+
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string
+  );
 
   const accessToken = createToken(
     jwtPayload,
@@ -42,6 +54,7 @@ const loginUser = async (payload: TLoginUser) => {
 
   return {
     accessToken,
+    refreshToken,
     newUser,
   };
 };
@@ -93,7 +106,7 @@ const resetPasswod = async (payload: { email: string, newPassword: string }, tok
       "Something invalid happen",
     );
   }
-  console.log('this si ', userId,email, payload.email)
+  console.log('this si ', userId, email, payload.email)
   // //if the user is exist
   const user = await User.findOne({ email: payload.email }).select(
     "email password role"
@@ -112,8 +125,54 @@ const resetPasswod = async (payload: { email: string, newPassword: string }, tok
   return updateUser;
 
 }
+
+
+
+const refreshToken = async (token: string) => {
+  // checking if the given token is valid
+  console.log('fdasfdasfasfdfasfds test ',config.jwt_refresh_secret, token)
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string
+  ) as JwtPayload;
+
+  const { email } = decoded;
+
+  // checking if the user is exist
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found with this email!");
+  }
+
+  const jwtPayload = {
+    userId: user._id,
+    email: user.email,
+    role: user.role,
+    profileImage: user?.profileImage,
+    name: user?.name,
+    followers: user?.followers,
+    following: user?.following,
+    posts: user?.posts,
+    phone: user?.phone,
+    address: user?.address
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string
+  );
+
+  return {
+    accessToken,
+  };
+};
+
+
 export const AuthServices = {
   loginUser,
   forgetPasswod,
-  resetPasswod
+  resetPasswod,
+  refreshToken
 };

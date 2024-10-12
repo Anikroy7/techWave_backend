@@ -8,6 +8,7 @@ export type TUser = {
   password: string;
   phone: string;
   profileImage: string;
+  // dateOfBirth: string;
   address: string;
   role: "user" | "admin";
   status: 'active' | 'blocked',

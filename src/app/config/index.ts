@@ -18,5 +18,7 @@ export default {
   storeId: process.env.AAMARPAY_STORE_ID,
   signatureKey: process.env.AAMARPAY_SIGNATURE_KEY,
   server_base_url: process.env.SERVER_BASE_URL,
-  client_base_url: process.env.CLIENT_BASE_URL
+  client_base_url: process.env.CLIENT_BASE_URLZ,
+  jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
+  jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
 };

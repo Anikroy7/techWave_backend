@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { Post } from "./post.model";
 import { TPost } from "./post.interface";
+import mongoose from "mongoose";
 
 const createPostIntoDB = async (payload: TPost) => {
     const newPost = await Post.create(payload);
@@ -38,10 +39,22 @@ const updatePostIntoDB = async (_id: string, payload: TPost) => {
 const getAllPostsFromDB = async () => {
     const posts = await Post.find({ isDeleted: { $ne: true } }).select(
         "-createdAt -updatedAt -__v",
-    ).populate('user').populate('category');
+    ).populate('user');
+    return posts;
+};
+const getMyPostsFromDB = async (userId: string) => {
+    const objectId = new mongoose.Types.ObjectId(userId);
+console.log('objectId', objectId)
+    const posts = await Post.find(
+        { user: objectId, isDeleted: { $ne: true } }
+      )
+        .select("-createdAt -updatedAt -__v")
+        .populate('user');
     return posts;
 };
 const deletePostFromDB = async (_id: string) => {
+    console.log('objectId', 'objectId')
+
     const post = await Post.findById(_id);
     if (!post) {
         throw new AppError(httpStatus.NOT_FOUND, "Can't find the post");
@@ -56,5 +69,6 @@ export const PostServices = {
     getAllPostsFromDB,
     updatePostIntoDB,
     getPostFromDB,
-    deletePostFromDB
+    deletePostFromDB,
+    getMyPostsFromDB
 };

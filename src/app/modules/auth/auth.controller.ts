@@ -5,13 +5,14 @@ import { AuthServices } from "./auth.service";
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
-  const { accessToken, newUser } = result;
+  const { accessToken, newUser, refreshToken } = result;
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "User logged in successfully",
-    token: accessToken,
+    accessToken,
+    refreshToken,
     data: newUser,
   });
 });
@@ -27,7 +28,6 @@ const forgetPassword = catchAsync(async (req, res) => {
 });
 const resetPassword = catchAsync(async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
-  console.log('token',token)
   const result = await AuthServices.resetPasswod(req.body, token);
   sendResponse(res, {
     success: true,
@@ -36,8 +36,24 @@ const resetPassword = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+
+const refreshToken = catchAsync(async (req, res) => {
+  // console.log('cookies token', req.headers.cookie)
+  const token = req.headers.cookie?.split(" ")[1] as string;
+  const result = await AuthServices.refreshToken(token);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Access token retrieved successfully!',
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   loginUser,
   forgetPassword,
-  resetPassword
+  resetPassword,
+  refreshToken
 };

@@ -9,23 +9,24 @@ const postSchema = new Schema<TPost>({
     },
     attachments: {
         type: [String],
-        required: [true, 'At least one attachment is required.'],
-        validate: {
-            validator: function (v: string[]) {
-                return v.length > 0;
-            },
-            message: 'At least one attachment must be provided.'
-        }
+        required:false
+        // required: [true, 'At least one attachment is required.'],
+        // validate: {
+        //     validator: function (v: string[]) {
+        //         return v.length > 0;
+        //     },
+        //     message: 'At least one attachment must be provided.'
+        // }
     },
-    category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+    category: { type: String, required: true },
     comments: { type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }], default: [] },
     downvote: {
         type: Number,
-        required: true,
+        default:0
     },
     upvote: {
         type: Number,
-        required: true,
+        default:0
     },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     isDeleted: {
