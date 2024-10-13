@@ -45,7 +45,13 @@ const updatePostIntoDB = async (_id: string, payload: TPost) => {
 const getAllPostsFromDB = async () => {
     const posts = await Post.find({ isDeleted: { $ne: true } }).select(
         "-createdAt -updatedAt -__v",
-    ).populate('user');
+    ).populate('user').populate({
+        path: 'comments',
+        populate: {
+            path: 'user',
+            select: 'name profileImage'
+        },
+    });
     return posts;
 };
 const getMyPostsFromDB = async (userId: string) => {
