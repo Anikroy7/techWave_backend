@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import AppError from "../../errors/AppError";
 import { TComment } from "./comment.interface";
 import { Comment } from "./comment.model";
+import { Post } from "../post/post.model";
 
 
 const createCommentIntoDB = async (payload: TComment) => {
@@ -9,6 +10,7 @@ const createCommentIntoDB = async (payload: TComment) => {
     if (!newComment) {
         throw new AppError(httpStatus.BAD_REQUEST, "Failed to create comment");
     }
+    await Post.updateOne({_id: payload.post}, { $push: { comments: newComment._id } })
     return newComment;
 };
 const getCommentFromDB = async (_id: string) => {
