@@ -50,7 +50,27 @@ const updateUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+const addFollowers = catchAsync(async (req, res) => {
+  const { userId, followerId } = req.body;
+  const result = await UserServices.addUserFollwers( userId, followerId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Follwing this user",
+    data: result,
+  });
+});
+const deleteFollowers = catchAsync(async (req, res) => {
+  console.log('dlete',req.body)
+  const { userId, followerId } = req.body;
+  const result = await UserServices.deleteUserFollwers( userId, followerId);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Unfollow user successfully!",
+    data: result,
+  });
+});
 const getAllUsers = catchAsync(async (req, res) => {
 
   const result = await UserServices.getAllUsersFromDB();
@@ -66,5 +86,7 @@ export const UserControllers = {
   createUser,
   getUser,
   updateUser,
-  getAllUsers
+  getAllUsers,
+  deleteFollowers,
+  addFollowers
 };

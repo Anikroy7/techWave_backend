@@ -10,7 +10,7 @@ router.get('/my-posts', /* auth(USER_ROLE.user, USER_ROLE.admin), */ PostControl
 router.post('/', /* auth(USER_ROLE.user), */  PostControllers.createPost)
 router.put('/:postId',/*  auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.updatePost)
 router.get('/:postId', auth(USER_ROLE.user, USER_ROLE.admin), PostControllers.getPost)
-router.delete('/:postId', auth(USER_ROLE.user, USER_ROLE.admin), PostControllers.deletePost)
+router.delete('/:postId', /* auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.deletePost)
 
 
 

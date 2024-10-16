@@ -26,6 +26,12 @@ export const updateUserValidationSchema = z.object({
     isDeleted: z.boolean().default(false).optional(),
   }),
 });
+export const updateUserFollwersValidationSchema = z.object({
+  body: z.object({
+    userId: z.string(),
+    followerId: z.string(),
+  }),
+});
 
 export const UserValidation = {
   createUserValidationSchema,

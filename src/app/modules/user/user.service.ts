@@ -48,9 +48,35 @@ const getAllUsersFromDB = async () => {
   );
   return users;
 };
+const addUserFollwers = async (userId: string, follwerId: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the user");
+  }
+  const follwingUser = await User.findById(follwerId);
+  if (!follwingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the following user");
+  }
+  const updatedUser = await User.updateOne({ _id: userId }, { $push: { followers: follwerId } });
+  return updatedUser;
+};
+const deleteUserFollwers = async (userId: string, follwerId: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the user");
+  }
+  const follwingUser = await User.findById(follwerId);
+  if (!follwingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the following user");
+  }
+  const updatedUser = await User.updateOne({ _id: userId }, { $pull: { followers: follwerId } });
+  return updatedUser;
+};
 export const UserServices = {
   createUserIntoDB,
   getUserFromDB,
   updateUserIntoDB,
-  getAllUsersFromDB
+  addUserFollwers,
+  getAllUsersFromDB,
+  deleteUserFollwers
 };
