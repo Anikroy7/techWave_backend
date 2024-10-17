@@ -49,7 +49,7 @@ const getAllPostsFromDB = async () => {
         path: 'comments',
         populate: {
             path: 'user',
-            select: 'name profileImage'
+            select: 'name profileImage followers following'
         },
     });
     return posts;
@@ -65,7 +65,7 @@ const getMyPostsFromDB = async (userId: string) => {
             path: 'comments',
             populate: {
                 path: 'user',
-                select: 'name profileImage'
+                select: 'name profileImage followers following'
             },
         })
         .sort({ createdAt: -1 });

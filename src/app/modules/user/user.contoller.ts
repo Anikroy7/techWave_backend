@@ -51,8 +51,9 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 const addFollowers = catchAsync(async (req, res) => {
-  const { userId, followerId } = req.body;
-  const result = await UserServices.addUserFollwers( userId, followerId);
+
+  const { userId, followingId } = req.body;
+  const result = await UserServices.addUserFollwers(userId, followingId);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -61,9 +62,9 @@ const addFollowers = catchAsync(async (req, res) => {
   });
 });
 const deleteFollowers = catchAsync(async (req, res) => {
-  console.log('dlete',req.body)
-  const { userId, followerId } = req.body;
-  const result = await UserServices.deleteUserFollwers( userId, followerId);
+  console.log('dlete fsfss', req.body)
+  const { userId, followingId } = req.body;
+  const result = await UserServices.deleteUserFollwers(userId, followingId);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -81,6 +82,16 @@ const getAllUsers = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getGroupUsersInfo = catchAsync(async (req, res) => {
+  const ids = req.body
+  const result = await UserServices.getGroupUsersInfoFromDB(ids);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "User profile retrieved successfully",
+    data: result,
+  });
+});
 
 export const UserControllers = {
   createUser,
@@ -88,5 +99,6 @@ export const UserControllers = {
   updateUser,
   getAllUsers,
   deleteFollowers,
-  addFollowers
+  addFollowers,
+  getGroupUsersInfo
 };

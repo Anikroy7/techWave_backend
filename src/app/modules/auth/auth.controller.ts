@@ -39,7 +39,6 @@ const resetPassword = catchAsync(async (req, res) => {
 
 
 const refreshToken = catchAsync(async (req, res) => {
-  // console.log('cookies token', req.headers.cookie)
   const token = req.headers.cookie?.split(" ")[1] as string;
   const result = await AuthServices.refreshToken(token);
 

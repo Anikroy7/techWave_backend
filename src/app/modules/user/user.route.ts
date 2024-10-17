@@ -7,7 +7,8 @@ import { updateUserFollwersValidationSchema, updateUserValidationSchema } from "
 
 const router = express.Router();
 
-router.get('/', auth(USER_ROLE.admin), UserControllers.getAllUsers)
+router.get('/', /* auth(USER_ROLE.admin), */ UserControllers.getAllUsers)
+// router.get('/getGroupUsersInfo', /* auth(USER_ROLE.admin), */ UserControllers.getGroupUsersInfo)
 
 router.get("/me", auth(USER_ROLE.admin, USER_ROLE.user), UserControllers.getUser);
 

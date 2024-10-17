@@ -45,6 +45,15 @@ const userSchema = new Schema<TUser, UserModel>(
     followers: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     following: { type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
     posts: { type: [{ type: Schema.Types.ObjectId, ref: 'Post' }], default: [] },
+    order: { type: Schema.Types.ObjectId, ref: 'Order', required: false, default: null },
+    transactionId: {
+      type: String,
+      default: null
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
     isDeleted: {
       type: Boolean,
       default: false

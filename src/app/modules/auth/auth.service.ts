@@ -26,18 +26,22 @@ const loginUser = async (payload: TLoginUser) => {
 
   //create token and sent to the client
 
-  const newUser = await User.findOne({ email: payload.email });
+  const newUser = await User.findOne({ email: payload.email }).populate({
+    path: 'followers',
+    select: 'name profileImage',
+  }).populate({
+    path: 'following',
+    select: 'name profileImage',
+  });
   const jwtPayload = {
     userId: user._id,
     email: user.email,
     role: user.role,
     profileImage: newUser?.profileImage,
     name: newUser?.name,
-    followers: newUser?.followers,
-    following: newUser?.following,
-    posts: newUser?.posts,
     phone: newUser?.phone,
-    address: newUser?.address
+    address: newUser?.address,
+    isVerified: newUser?.isVerified,
   };
 
   const refreshToken = createToken(
@@ -106,7 +110,6 @@ const resetPasswod = async (payload: { email: string, newPassword: string }, tok
       "Something invalid happen",
     );
   }
-  console.log('this si ', userId, email, payload.email)
   // //if the user is exist
   const user = await User.findOne({ email: payload.email }).select(
     "email password role"
@@ -130,7 +133,6 @@ const resetPasswod = async (payload: { email: string, newPassword: string }, tok
 
 const refreshToken = async (token: string) => {
   // checking if the given token is valid
-  console.log('fdasfdasfasfdfasfds test ',config.jwt_refresh_secret, token)
   const decoded = jwt.verify(
     token,
     config.jwt_refresh_secret as string
@@ -151,9 +153,7 @@ const refreshToken = async (token: string) => {
     role: user.role,
     profileImage: user?.profileImage,
     name: user?.name,
-    followers: user?.followers,
-    following: user?.following,
-    posts: user?.posts,
+    isVerified:user?.isVerified,
     phone: user?.phone,
     address: user?.address
   };

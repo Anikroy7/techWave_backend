@@ -29,7 +29,7 @@ export const updateUserValidationSchema = z.object({
 export const updateUserFollwersValidationSchema = z.object({
   body: z.object({
     userId: z.string(),
-    followerId: z.string(),
+    followingId: z.string(),
   }),
 });
 

@@ -13,7 +13,13 @@ const createUserIntoDB = async (payload: TUser) => {
   return newUser;
 };
 const getUserFromDB = async (_id: string) => {
-  const user = await User.findById(_id);
+  const user = await User.findById(_id).populate({
+    path: 'followers',
+    select: 'name profileImage',
+  }).populate({
+    path: 'following',
+    select: 'name profileImage',
+  });
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the user");
   }
@@ -43,33 +49,53 @@ const updateUserIntoDB = async (_id: string, payload: TUser) => {
 };
 
 const getAllUsersFromDB = async () => {
-  const users = await User.find({ isDeleted: { $ne: true } }).select(
+  const users = await User.find({ isDeleted: { $ne: true } }).populate({
+    path: 'followers',
+    select: 'name profileImage',
+  }).populate({
+    path: 'following',
+    select: 'name profileImage',
+  }).select(
     "-createdAt -updatedAt -__v",
   );
   return users;
 };
-const addUserFollwers = async (userId: string, follwerId: string) => {
+const getGroupUsersInfoFromDB = async (ids: string[]) => {
+  const users = await User.find({
+    '_id': {
+      $in: ids
+    }
+  });
+  return users
+};
+const addUserFollwers = async (userId: string, followingId: string) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the user");
   }
-  const follwingUser = await User.findById(follwerId);
+  const follwingUser = await User.findById(followingId);
   if (!follwingUser) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the following user");
   }
-  const updatedUser = await User.updateOne({ _id: userId }, { $push: { followers: follwerId } });
+  const updatedUser = await User.updateOne({ _id: followingId }, { $push: { following: userId } });
+  await User.updateOne({ _id: userId }, { $push: { followers: followingId } });
   return updatedUser;
 };
-const deleteUserFollwers = async (userId: string, follwerId: string) => {
+
+
+
+const deleteUserFollwers = async (userId: string, followingId: string) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the user");
   }
-  const follwingUser = await User.findById(follwerId);
+  const follwingUser = await User.findById(followingId);
   if (!follwingUser) {
     throw new AppError(httpStatus.NOT_FOUND, "Can't find the following user");
   }
-  const updatedUser = await User.updateOne({ _id: userId }, { $pull: { followers: follwerId } });
+  const updatedUser = await User.updateOne({ _id: followingId }, { $pull: { following: userId } });
+  await User.updateOne({ _id: userId }, { $pull: { followers: followingId } });
+
   return updatedUser;
 };
 export const UserServices = {
@@ -78,5 +104,6 @@ export const UserServices = {
   updateUserIntoDB,
   addUserFollwers,
   getAllUsersFromDB,
-  deleteUserFollwers
+  deleteUserFollwers,
+  getGroupUsersInfoFromDB
 };

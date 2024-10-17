@@ -1,6 +1,7 @@
 import { Model } from "mongoose";
 import { USER_ROLE } from "./user.constant";
 import { TPost } from "../post/post.interface";
+import { TOrder } from "../order/order.interface";
 
 export type TUser = {
   name: string;
@@ -15,7 +16,10 @@ export type TUser = {
   isDeleted: boolean
   followers: TUser[];
   following: TUser[];
-  posts: TPost[]   
+  posts: TPost[]
+  order: TOrder;
+  isVerified: boolean;
+  transactionId: string;   
 };
 
 export interface UserModel extends Model<TUser> {
