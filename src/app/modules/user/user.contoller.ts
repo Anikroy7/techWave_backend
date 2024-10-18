@@ -50,6 +50,17 @@ const updateUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateSingleUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await UserServices.updateUserIntoDB(userId, req.body);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Profile updated successfully",
+    data: result,
+  });
+});
 const addFollowers = catchAsync(async (req, res) => {
 
   const { userId, followingId } = req.body;
@@ -100,5 +111,6 @@ export const UserControllers = {
   getAllUsers,
   deleteFollowers,
   addFollowers,
-  getGroupUsersInfo
+  getGroupUsersInfo,
+  updateSingleUser
 };

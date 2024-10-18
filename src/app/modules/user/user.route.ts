@@ -12,6 +12,7 @@ router.get('/', /* auth(USER_ROLE.admin), */ UserControllers.getAllUsers)
 
 router.get("/me", auth(USER_ROLE.admin, USER_ROLE.user), UserControllers.getUser);
 
+router.put('/:userId', UserControllers.updateSingleUser)
 router.put('/add-followers',validateRequest(updateUserFollwersValidationSchema), UserControllers.addFollowers)
 router.put('/delete-followers',validateRequest(updateUserFollwersValidationSchema), UserControllers.deleteFollowers)
 router.put(
