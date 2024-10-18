@@ -23,9 +23,9 @@ const createOrderIntoDB = async (payload: TOrder) => {
     endDate: payload.endDate
   }
   const isOrderExists = await Order.findOne({ user: new mongoose.Types.ObjectId(userInfo._id) });
-  if(isOrderExists){
+  if (isOrderExists) {
     throw new AppError(httpStatus.BAD_REQUEST, "All ready made payment!!");
-    
+
   }
   const newOrder = await Order.create(orderData);
   const paymentInfo = {
@@ -49,18 +49,24 @@ const createOrderIntoDB = async (payload: TOrder) => {
 const getMyOrderFromDB = async (userId: string) => {
   const myorder = await Order.findOne({ user: new mongoose.Types.ObjectId(userId) }).populate('user');
   return myorder
-    
+
 };
 
 const getOrderFromDB = async (_id: string) => {
   const order = await Order.findById(_id).populate('user');
   if (!order) {
-      throw new AppError(httpStatus.NOT_FOUND, "Can't find the order");
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the order");
   }
   return order;
+};
+
+const getAllOrdersFromDB = async () => {
+  const posts = await Order.find({ isDeleted: { $ne: true } }).populate('user').sort({ createdAt: -1 });;
+  return posts;
 };
 export const OrderServices = {
   createOrderIntoDB,
   getMyOrderFromDB,
-  getOrderFromDB
+  getOrderFromDB,
+  getAllOrdersFromDB
 }
