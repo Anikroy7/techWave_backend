@@ -3,12 +3,14 @@ import AppError from "../../errors/AppError";
 import { Post } from "./post.model";
 import { TPost } from "./post.interface";
 import mongoose from "mongoose";
+import { User } from "../user/user.model";
 
 const createPostIntoDB = async (payload: TPost) => {
     const newPost = await Post.create(payload);
     if (!newPost) {
         throw new AppError(httpStatus.BAD_REQUEST, "Failed to create post");
     }
+    await User.updateOne({ _id: payload.user }, { $push: { posts: newPost._id } })
     return newPost;
 };
 const getPostFromDB = async (_id: string) => {
@@ -59,7 +61,6 @@ const getMyPostsFromDB = async (userId: string) => {
     const posts = await Post.find(
         { user: objectId, isDeleted: { $ne: true } }
     )
-        .select("-createdAt -updatedAt -__v")
         .populate('user')
         .populate({
             path: 'comments',

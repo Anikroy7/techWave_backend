@@ -9,8 +9,15 @@ router.post(
 router.post(
   "/payment/confirm", OrderControllers.confirmPayment,
 );
+
 router.post(
   "/my-order", OrderControllers.getMyOrder,
 );
+
+router.get(
+  "/my-order/:userId", OrderControllers.getMySingleOrder,
+);
+
+router.get('/:orderId',  OrderControllers.getOrder)
 
 export const OrderRoutes = router;

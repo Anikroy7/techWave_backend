@@ -51,7 +51,16 @@ const getMyOrderFromDB = async (userId: string) => {
   return myorder
     
 };
+
+const getOrderFromDB = async (_id: string) => {
+  const order = await Order.findById(_id).populate('user');
+  if (!order) {
+      throw new AppError(httpStatus.NOT_FOUND, "Can't find the order");
+  }
+  return order;
+};
 export const OrderServices = {
   createOrderIntoDB,
-  getMyOrderFromDB
+  getMyOrderFromDB,
+  getOrderFromDB
 }

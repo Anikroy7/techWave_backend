@@ -29,6 +29,16 @@ const getMyOrder = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getMySingleOrder = catchAsync(async (req, res) => {
+  const {userId} = req.params;
+  const result = await OrderServices.getMyOrderFromDB(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Order retrived successfully",
+    data: result,
+  });
+});
 
 
 const confirmPayment = async (req: Request, res: Response) => {
@@ -93,8 +103,22 @@ const confirmPayment = async (req: Request, res: Response) => {
     `)
 }
 
+const getOrder = catchAsync(async (req, res) => {
+  const { orderId } = req.params;
+
+  const result = await OrderServices.getOrderFromDB(orderId);
+  sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Order retrieved successfully",
+      data: result,
+  });
+});
+
 export const OrderControllers = {
   createOrder,
   confirmPayment,
   getMyOrder,
+  getOrder,
+  getMySingleOrder
 };
