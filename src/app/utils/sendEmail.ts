@@ -1,22 +1,22 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "anik.mysoftheaven@gmail.com",
-    pass: "yiid kxou kiqs nqax",
-  },
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for port 465, false for other ports
+    auth: {
+        user: "anik.mysoftheaven@gmail.com",
+        pass: "yiid kxou kiqs nqax",
+    },
 });
 
 export const sendEmail = async (to: string, link: string) => {
-  await transporter.sendMail({
-    from: "anik.mysoftheaven@gmail.com", // sender address
-    to: to, // list of receivers
-    subject: "Reset Password for car rental service", // Subject line
-    text: "", // plain text body
-    html: `
+    await transporter.sendMail({
+        from: "anik.mysoftheaven@gmail.com", // sender address
+        to: to, // list of receivers
+        subject: "Reset Password for car rental service", // Subject line
+        text: "", // plain text body
+        html: `
     
     <!doctype html>
 <html lang="en-US">
@@ -44,7 +44,7 @@ export const sendEmail = async (to: string, link: string) => {
                     <tr>
                         <td style="text-align:center;">
                           <a href="https://rakeshmandal.com" title="logo" target="_blank">
-                            <img width="60" src="https://www.pngmart.com/files/22/Car-Logo-PNG-Clipart.png" title="logo" alt="logo">
+                            <img width="300" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo9lsguElms4_3HsOiZYnDQjQc8iRPxN7-Qw&s" title="logo" alt="logo">
                           </a>
                         </td>
                     </tr>
@@ -70,7 +70,7 @@ export const sendEmail = async (to: string, link: string) => {
                                             following link and follow the instructions.
                                         </p>
                                         <a href=${link}
-                                            style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
+                                            style="background:black;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
                                             Password</a>
                                     </td>
                                 </tr>
@@ -100,5 +100,5 @@ export const sendEmail = async (to: string, link: string) => {
 </html>
     
     `, // html body
-  });
+    });
 };
