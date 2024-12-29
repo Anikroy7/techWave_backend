@@ -1,3 +1,6 @@
+<div align="center">
+  <img src="https://techwave-frontend.vercel.app/_next/image?url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcRo9lsguElms4_3HsOiZYnDQjQc8iRPxN7-Qw%26s&w=384&q=75" width="350px" />
+</div>
 
 # TECHWAVE
 
