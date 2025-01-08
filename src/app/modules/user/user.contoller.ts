@@ -73,7 +73,6 @@ const addFollowers = catchAsync(async (req, res) => {
   });
 });
 const deleteFollowers = catchAsync(async (req, res) => {
-  console.log('dlete fsfss', req.body)
   const { userId, followingId } = req.body;
   const result = await UserServices.deleteUserFollwers(userId, followingId);
   sendResponse(res, {

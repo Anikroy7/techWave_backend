@@ -23,5 +23,6 @@ router.get(
 );
 
 router.get('/:orderId',  OrderControllers.getOrder)
+router.put('/:orderId',  OrderControllers.updateOrder)
 
 export const OrderRoutes = router;

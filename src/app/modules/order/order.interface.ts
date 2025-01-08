@@ -3,11 +3,7 @@ import { Types } from "mongoose";
 
 export type TOrder = {
     user: Types.ObjectId;
-    paymentStatus: {
-        type: String,
-        enum: ['Pending', 'Paid', 'Failed'],
-        default: 'Pending'
-    },
+    paymentStatus: 'Pending' | 'Paid' | 'Failed';
     transactionId: {
         type: String,
         required: true

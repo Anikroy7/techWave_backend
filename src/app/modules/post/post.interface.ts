@@ -10,4 +10,5 @@ export type TPost ={
     downvote: TUser[];
     user: TUser;
     isDeleted: boolean;
+    isPaid: boolean;
 }

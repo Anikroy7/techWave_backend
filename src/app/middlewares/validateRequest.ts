@@ -8,7 +8,6 @@ const validateRequest = (schema: AnyZodObject) => {
       await schema.parseAsync({
         body: req.body,
       });
-
       next();
     } catch (err) {
       next(err);
@@ -21,7 +20,6 @@ export const validateRequestCookies = (schema: AnyZodObject) => {
     const parsedCookies = await schema.parseAsync({
       cookies: req.cookies,
     });
-
     req.cookies = parsedCookies.cookies;
 
     next();

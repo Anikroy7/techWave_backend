@@ -64,9 +64,38 @@ const getAllOrdersFromDB = async () => {
   const posts = await Order.find({ isDeleted: { $ne: true } }).populate('user').sort({ createdAt: -1 });;
   return posts;
 };
+
+const updateOrderIntoDB = async (_id: string, payload: TOrder) => {
+  const order = await Order.findById(_id);
+  if (!order) {
+    throw new AppError(httpStatus.NOT_FOUND, "Can't find the order");
+  }
+
+  const updatedData = {
+    ...order.toObject(),
+    ...payload,
+  };
+  if (payload.paymentStatus === 'Paid') {
+    await User.updateOne({ _id: payload.user }, { isVerified: true, transactionId: order.transactionId, order: order._id })
+  } else if (payload.paymentStatus === 'Pending') {
+    await User.updateOne({ _id: payload.user }, { isVerified: false, transactionId: null, order: null })
+  } else if (payload.paymentStatus === 'Failed') {
+    await User.updateOne({ _id: payload.user }, { isVerified: false, transactionId: null, order: null })
+  }
+  const updatedOrder = await Order.findByIdAndUpdate(_id, updatedData, {
+    new: true,
+    runValidators: true,
+    select: "-createdAt -updatedAt -__v",
+  });
+  return updatedOrder;
+};
+
+// const user = aqait user find .one 
+
 export const OrderServices = {
   createOrderIntoDB,
   getMyOrderFromDB,
   getOrderFromDB,
+  updateOrderIntoDB,
   getAllOrdersFromDB
 }

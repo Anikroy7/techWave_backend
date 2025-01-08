@@ -20,7 +20,7 @@ const getPostFromDB = async (_id: string) => {
             path: 'user',
             select: 'name profileImage'
         },
-    });
+    }).populate('user');
     if (!post) {
         throw new AppError(httpStatus.NOT_FOUND, "Can't find the post");
     }
