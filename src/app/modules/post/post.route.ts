@@ -8,6 +8,11 @@ const router = express.Router();
 router.get('/', /* auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.getAllPosts)
 router.get('/my-posts', /* auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.getMyPosts)
 router.post('/', /* auth(USER_ROLE.user), */  PostControllers.createPost)
+
+// ! tenp
+router.post('/many', /* auth(USER_ROLE.user), */  PostControllers.createPostMany)
+
+
 router.put('/:postId',/*  auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.updatePost)
 router.get('/:postId', auth(USER_ROLE.user, USER_ROLE.admin), PostControllers.getPost)
 router.delete('/:postId', /* auth(USER_ROLE.user, USER_ROLE.admin), */ PostControllers.deletePost)

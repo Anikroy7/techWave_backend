@@ -4,6 +4,8 @@ import { Post } from "./post.model";
 import { TPost } from "./post.interface";
 import mongoose from "mongoose";
 import { User } from "../user/user.model";
+import { paginationHelper } from "../../utils/paginationHelpers";
+import { IPaginationOptions } from "../../types";
 
 const createPostIntoDB = async (payload: TPost) => {
     const newPost = await Post.create(payload);
@@ -44,15 +46,25 @@ const updatePostIntoDB = async (_id: string, payload: TPost) => {
     return updatedPost;
 };
 
-const getAllPostsFromDB = async () => {
-    const posts = await Post.find({ isDeleted: { $ne: true } }).populate('user').populate({
+const getAllPostsFromDB = async (options: IPaginationOptions) => {
+    const { page, limit, skip } = paginationHelper.calculatePagination(options);
+
+    const posts = await Post.find({ isDeleted: { $ne: true }, }).populate('user').populate({
         path: 'comments',
         populate: {
             path: 'user',
             select: 'name profileImage followers following'
         },
-    }).sort({ createdAt: -1 });;
-    return posts;
+    }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const total = await Post.countDocuments({ isDeleted: false });
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: posts
+    };
 };
 const getMyPostsFromDB = async (userId: string) => {
     const objectId = new mongoose.Types.ObjectId(userId);
